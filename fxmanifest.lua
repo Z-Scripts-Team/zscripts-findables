@@ -7,20 +7,15 @@ author 'Z-Scripts Team'
 version '1.0.0'
 shared_script {
     'config.lua',
+
+    'modules/callback.lua',
+    'modules/statebags.lua',
 }
 server_scripts {
+    'server-config.lua',
+
     'server/main.lua',
-    'server/arena.lua',
 }
 client_scripts {
     'client/main.lua',
-}
-ui_page {
-    'html/index.html',
-}
-files {
-    --Nui files
-    'html/**',
-    --Locales files
-    'locales/*.lua',
 }

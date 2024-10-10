@@ -12,3 +12,17 @@ if errorMessage then
 else
     Server.Locales = stringFunction()
 end
+
+Server.MainThread = function()
+    local data = ServerConfig.Locations
+
+    for k, v in pairs(data) do
+        for i = 1, #v.items do
+            data.items[i].id = i
+        end
+    end
+
+    UpdateGlobalStateBag('locations', data)
+end
+
+CreatEthread(Server.MainThread)
