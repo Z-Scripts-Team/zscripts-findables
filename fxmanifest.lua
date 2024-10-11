@@ -36,5 +36,10 @@ dependencies {
     'oxmysql',
 }
 escrow_ignore {
-    '**',
+    'server-functions.lua',
+    'server-config.lua',
+    'config.lua',
+    'config.lua',
+    'stream/**',
+    'locales/**',
 }
