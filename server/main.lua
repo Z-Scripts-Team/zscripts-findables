@@ -71,8 +71,8 @@ Server.Collect = function(key, id)
 
     if data then
         data = json.decode(data)
-        if data?[key]?[tostring(id)] then return end
         if not data[key] then data[key] = {} end
+        if data[key][tostring(id)] then return end
         data[key][tostring(id)] = true
 
         MySQL.update.await('UPDATE findables_data SET data = ? WHERE license = ?', {
@@ -90,9 +90,11 @@ Server.Collect = function(key, id)
 
     local collected = 0
 
-    for k, v in pairs(data[key]) do
-        if v then
-            collected += 1
+    if data[event] then
+        for k, v in pairs(data[event]) do
+            if v then
+                collected += 1
+            end
         end
     end
 
@@ -111,8 +113,10 @@ Server.GetEventPoints = function(playerId, args)
     if playerId < 1 then return end
 
     local event = args[1]
-    if not ServerConfig.Locations[event] then return TriggerClientEvent('zscripts-findables:client:notification', playerId,
-        Server.Locales.errorEvent, 'error') end
+    if not ServerConfig.Locations[event] then
+        return TriggerClientEvent('zscripts-findables:client:notification', playerId,
+            Server.Locales.errorEvent, 'error')
+    end
 
     local identifier = Config.Function.GetPlayerIdentifier(playerId)
     if not identifier then
@@ -128,14 +132,17 @@ Server.GetEventPoints = function(playerId, args)
 
         local collected = 0
 
-        for k, v in pairs(data[event]) do
-            if v then
-                collected += 1
+        if data[event] then
+            for k, v in pairs(data[event]) do
+                if v then
+                    collected += 1
+                end
             end
         end
 
-        TriggerClientEvent('zscripts-findables:client:notification', playerId, string.format(Server.Locales.collectedInfo,
-            collected, #ServerConfig.Locations[event].items, ServerConfig.Locations[event].label), 'info')
+        TriggerClientEvent('zscripts-findables:client:notification', playerId,
+            string.format(Server.Locales.collectedInfo,
+                collected, #ServerConfig.Locations[event].items, ServerConfig.Locations[event].label), 'info')
     else
         TriggerClientEvent('zscripts-findables:client:notification', playerId, string.format(Server.Locales.noCollected,
             ServerConfig.Locations[event].label), 'error')
