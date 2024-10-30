@@ -90,8 +90,8 @@ Server.Collect = function(key, id)
 
     local collected = 0
 
-    if data[event] then
-        for k, v in pairs(data[event]) do
+    if data[key] then
+        for k, v in pairs(data[key]) do
             if v then
                 collected += 1
             end
